@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from functions import get_files_info
+from functions.get_files_info import get_files_info
 
 print(get_files_info("calculator", "."))
 print(get_files_info("calculator", "/bin"))
