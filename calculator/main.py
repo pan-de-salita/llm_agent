@@ -3,6 +3,7 @@
 import sys
 
 from pkg.calculator import evaluate
+from pkg.render import format_json_output
 
 
 def main():
@@ -16,10 +17,8 @@ def main():
     try:
         result = evaluate(expression)
         if result is not None:
-            # to_print = format_json_output(expression, result)
-            # print(to_print)
-            print(f"expression: {expression}")
-            print(f"result: {result}")
+            to_print = format_json_output(expression, result)
+            print(to_print)
         else:
             print("Error: Expression is empty or only contains white space.")
     except Exception as e:
