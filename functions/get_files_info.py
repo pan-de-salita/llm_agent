@@ -2,30 +2,18 @@
 
 import os
 
+from functions.get_verified_target_dir import get_verified_target_dir
+
 
 def get_files_info(working_directory: str, directory: str = ".") -> str:
     print(f"Result for {directory if directory != "." else "current"} directory:")
     try:
-        working_dir_abs = os.path.abspath(working_directory)
-        target_dir = os.path.normpath(os.path.join(working_dir_abs, directory))
-        valid_target_dir = (
-            os.path.commonpath([working_dir_abs, target_dir]) == working_dir_abs
-        )
-
-        if not valid_target_dir:
-            raise Exception(
-                f'Cannot list "{directory}" as it is outside the permitted working directory'
-            )
-
-        if not os.path.isdir(directory):
-            raise Exception(f'"{directory}" is not a directory')
-
-        return _format_files_info(target_dir)
+        return _format_files_info(get_verified_target_dir(working_directory, directory))
     except Exception as e:
         return f"    Error: {e}"
 
 
-def _format_files_info(target_dir):
+def _format_files_info(target_dir) -> str:
     contents = os.listdir(target_dir)
     return "\n".join([_format_file_metadata(c, target_dir) for c in contents])
 
@@ -39,9 +27,9 @@ def _format_file_metadata(file, target_dir):
     return file_metadata
 
 
-def _format_file_size(file, target_dir):
+def _format_file_size(file, target_dir) -> int:
     return os.stat(os.path.join(target_dir, file)).st_size
 
 
-def _format_is_dir(file, target_dir):
+def _format_is_dir(file, target_dir) -> bool:
     return os.path.isdir(os.path.join(target_dir, file))
